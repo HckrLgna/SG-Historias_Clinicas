@@ -7,5 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Permision extends Model
 {
-    use HasFactory;
+    protected $fillable=['name','slug','description'];
+    //relaciones
+    public function role(){
+        return $this->belongsTo('App\Role');
+    }
+    public function users(){
+        return $this->belongsToMany('App\User')->withTimestamps();
+    }
+    //almacenamiento
+    //validacion
+    //recuperacion de la informacion
+    //otras operacion
 }
