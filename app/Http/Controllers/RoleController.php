@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Role\UpdateRequest;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use App\Http\Requests\Role\StoreRequest;
+
 
 class RoleController extends Controller
 {
@@ -14,7 +17,10 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+    //falta añadir autorizacion
+        return view('theme.backoffice.pages.role.index',[
+            'roles'=>Role::all(),
+        ]);
     }
 
     /**
@@ -24,7 +30,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('theme.backoffice.pages.role.create');
     }
 
     /**
@@ -33,9 +39,10 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request, Role $role)
     {
-        //
+        $role = $role->store($request);
+        return redirect()->route('backoffice.role.show',$role);
     }
 
     /**
@@ -46,7 +53,9 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
+        return view('theme.backoffice.pages.role.show',[
+            'role' => $role,
+        ]);
     }
 
     /**
@@ -57,7 +66,9 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        //
+        return view('theme.backoffice.pages.role.edit',[
+            'role' => $role,
+        ]);
     }
 
     /**
@@ -67,9 +78,10 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRequest $request, Role $role)
     {
-        //
+        $role->my_update($request);
+        return redirect()->route('backoffice.role.show',$role);
     }
 
     /**
