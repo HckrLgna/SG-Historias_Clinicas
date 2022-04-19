@@ -2,6 +2,10 @@
 @section('title','Crear rol')
 @section('head')
 @endsection
+@section('breadcrumbs')
+    <li><a href="{{route('backoffice.role.index')}}">Roles del sistema</a></li>
+    <li>Crear Rol</li>
+@endsection
 @section('content')
     <div class="section">
         <p class="caption">Introduce los datos para la creacion de un rol</p>

@@ -6,6 +6,7 @@ use App\Http\Requests\Role\UpdateRequest;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Http\Requests\Role\StoreRequest;
+use RealRashid\SweetAlert\Facades\Alert;
 
 
 class RoleController extends Controller
@@ -92,6 +93,9 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
+        $role->delete();
+
+
+        return redirect()->route('backoffice.role.index');
     }
 }

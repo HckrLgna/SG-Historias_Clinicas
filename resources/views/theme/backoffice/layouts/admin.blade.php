@@ -5,6 +5,7 @@
 <head>
     <title>@yield('title')</title>
     @include('theme.backoffice.layouts.includes.head')
+
 </head>
 <body>
 <!-- Start Page Loading -->
@@ -25,6 +26,7 @@
         <!-- //////////////////////////////////////////////////////////////////////////// -->
         <!-- START CONTENT -->
         <section id="content">
+            @include('theme.backoffice.layouts.includes.breadcrumb')
             <!--start container-->
             <div class="container">
                 @yield('content')

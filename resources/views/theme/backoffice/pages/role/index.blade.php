@@ -2,6 +2,13 @@
 @section('title','Roles del sistema')
 @section('head')
 @endsection
+@section('breadcrumbs')
+    <li><a href="{{route('backoffice.role.index')}}">Roles del sistema</a></li>
+@endsection
+@section('dropdown_settings')
+    <li><a href="{{route('backoffice.role.create')}}">Crear rol</a></li>
+@endsection
+
 @section('content')
     <div class="section">
         <b>Roles del sistema</b>
