@@ -16,5 +16,6 @@ Auth::routes(['verify' => true]);
 
 Route::group(['middeleware'=>['auth'],'as' => 'backoffice.'],function (){
     Route::resource('role','App\Http\Controllers\RoleController');
+    Route::resource('permission','App\Http\Controllers\PermissionController');
 });
 Route::get('/','App\Http\Controllers\RoleController@index');
