@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\UpdateRequest;
+use App\Http\Requests\User\StoreRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -27,7 +30,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('theme.backoffice.pages.user.create',[
+            'roles'=>Role::all(),
+        ]);
     }
 
     /**
@@ -36,9 +41,10 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request, User $user)
     {
-        //
+        $user=$user->store($request);
+        return redirect()->route('backoffice.user.show',$user);
     }
 
     /**
@@ -62,9 +68,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('theme.backoffice.pages.user.edit',[
+            'user'=>$user
+        ]);
     }
 
     /**
@@ -74,9 +82,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, User $user)
     {
-        //
+        $user->my_update($request);
+        return redirect()->route('backoffice.user.show',$user);
     }
 
     /**
@@ -85,9 +94,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->route('backoffice.user.index');
     }
     public function assign_role(User $user){
         return view('theme.backoffice.pages.user.assign_role',[

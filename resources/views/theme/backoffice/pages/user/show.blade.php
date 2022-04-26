@@ -6,6 +6,11 @@
     <li><a href="{{route('backoffice.user.index')}}">Usuarios del sistema</a></li>
     <li>{{$user->name}}</li>
 @endsection
+
+@section('dropdown_settings')
+    <li><a href="{{route('backoffice.user.edit',$user)}}" class="grey-text text-darken-2">Editar usuarios</a></li>
+@endsection
+
 @section('content')
     <div class="section">
         <strong>Usuario:</strong> <p>{{$user->name}}</p>
@@ -16,7 +21,7 @@
                     <div class="card">
                         <div class="card-content">
                             <span class="card-title">{{$user->name}}</span>
-                            <h4>Roles:: </h4>
+                            <p><strong>Edad :</strong> {{$user->age()}}</p>
                             <ul>
                                 @foreach($user->roles as $role)
                                     <li>{{$role->name}}</li>
@@ -37,7 +42,7 @@
 
         </div>
     </div>
-    <form method="post" action="{{route('backoffice.role.destroy',$user)}}" name="delete_form" >
+    <form method="post" action="{{route('backoffice.user.destroy',$user)}}" name="delete_form" >
         {{csrf_field()}}
         {{method_field('DELETE')}}
     </form>
