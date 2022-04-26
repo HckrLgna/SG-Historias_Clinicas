@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -119,5 +122,9 @@ class UserController extends Controller
     public function permission_assignment(Request $request, User $user){
         $user->permissions()->sync($request->permissions);
         return redirect()->route('backoffice.user.show',$user);
+    }
+
+    public function profile(){
+       return view('theme.frontoffice.pages.user.profile');
     }
 }

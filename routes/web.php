@@ -25,9 +25,10 @@ Route::get('home',function (){
 
 Auth::routes(['verify' => true]);
 
-Route::group(['middeleware'=>['auth'],'as' => 'backoffice.'],function (){
+Route::group(['middleware'=>['auth'],'as' => 'backoffice'],function (){
     Route::get('admin','App\Http\Controllers\AdminController@show')->name('admin.show');
     Route::resource('user','App\Http\Controllers\UserController');
+
     Route::get('user/{user}/assign_role','App\Http\Controllers\UserController@assign_role')->name('user.assign_role');
     Route::post('user/{user}/role_assignment','App\Http\Controllers\UserController@role_assignment')->name('user.role_assignment');
 
@@ -38,3 +39,6 @@ Route::group(['middeleware'=>['auth'],'as' => 'backoffice.'],function (){
     Route::resource('permission','App\Http\Controllers\PermissionController');
 });
 
+Route::group(['as'=>'frontoffice'], function (){
+   Route::get('profile','App\Http\Controllers\UserController@profile')->name('user.profile');
+});
