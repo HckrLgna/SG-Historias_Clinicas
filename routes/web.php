@@ -44,4 +44,5 @@ Route::group(['middleware' => ['cors']], function () {
 
 Route::group(['as'=>'frontoffice.'], function (){
    Route::get('profile','App\Http\Controllers\UserController@profile')->name('user.profile');
+   Route::get('pacient/cite', 'App\Http\Controllers\PatientController@cite')->name('patient.cite');
 });
