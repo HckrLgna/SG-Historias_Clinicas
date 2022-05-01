@@ -20,7 +20,10 @@ class PermissionPolicy
     {
         //
     }
-
+    public function index(User $user)
+    {
+        return $user->has_permission('index-permission');
+    }
     /**
      * Determine whether the user can view the model.
      *
@@ -30,7 +33,7 @@ class PermissionPolicy
      */
     public function view(User $user, Permission $permission)
     {
-        //
+        return $user->has_permission('view-permission');
     }
 
     /**
@@ -41,7 +44,7 @@ class PermissionPolicy
      */
     public function create(User $user)
     {
-        return true;
+        return $user->has_permission('view-permission');
     }
 
     /**
@@ -53,7 +56,7 @@ class PermissionPolicy
      */
     public function update(User $user, Permission $permission)
     {
-        //
+        return $user->has_permission('update-permission');
     }
 
     /**
@@ -65,7 +68,7 @@ class PermissionPolicy
      */
     public function delete(User $user, Permission $permission)
     {
-        //
+        return $user->has_permission('delete-permission');
     }
 
     /**

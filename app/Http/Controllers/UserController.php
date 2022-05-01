@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\ChangePasswordRequest;
 use App\Http\Requests\User\UpdateRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use function Sodium\add;
 
 class UserController extends Controller
 {
@@ -21,8 +23,9 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize('index', User::class);
         return view('theme.backoffice.pages.user.index',[
-            'users'=>User::all()
+            'users'=> auth()->user()->visible_users(),
         ]);
     }
 
@@ -33,6 +36,7 @@ class UserController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', User::class);
         return view('theme.backoffice.pages.user.create',[
             'roles'=>Role::all(),
         ]);
@@ -46,6 +50,7 @@ class UserController extends Controller
      */
     public function store(StoreRequest $request, User $user)
     {
+
         $user=$user->store($request);
         return redirect()->route('backoffice.user.show',$user);
     }
@@ -58,6 +63,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $this->authorize('view', $user);
         return view('theme.backoffice.pages.user.show',[
             'user'=>$user,
         ]);
@@ -73,7 +79,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('theme.backoffice.pages.user.edit',[
+        $this->authorize('update',$user);
+
+        return view($user->edit_view(),[
             'user'=>$user
         ]);
     }
@@ -88,7 +96,8 @@ class UserController extends Controller
     public function update(UpdateRequest $request, User $user)
     {
         $user->my_update($request);
-        return redirect()->route('backoffice.user.show',$user);
+        $view = (isset($_GET['view'])) ? $_GET['view'] : null;
+        return redirect()->route($user->user_show(),$user);
     }
 
     /**
@@ -99,27 +108,32 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->authorize('delete', $user);
         $user->delete();
         return redirect()->route('backoffice.user.index');
     }
     public function assign_role(User $user){
+        $this->authorize('assign_role', $user);
         return view('theme.backoffice.pages.user.assign_role',[
             'user'=>$user,
             'roles'=>Role::all()
         ]);
     }
     public function role_assignment(Request $request,User $user){
+        $this->authorize('assign_role', $user);
         $user->role_assignment($request);
         return redirect()->route('backoffice.user.show',$user);
 
     }
     public function assign_permission(User $user){
+        $this->authorize('assign_permission', $user);
         return view('theme.backoffice.pages.user.assign_permission',[
             'user' => $user,
             'roles' => $user->roles
         ]);
     }
     public function permission_assignment(Request $request, User $user){
+        $this->authorize('assign_permission', $user);
         $user->permissions()->sync($request->permissions);
         return redirect()->route('backoffice.user.show',$user);
     }
@@ -130,4 +144,16 @@ class UserController extends Controller
            'user' => $user,
        ]);
     }
+    public function edit_password(){
+        $this->authorize('update_password',auth()->user());
+        return view('theme.frontoffice.pages.user.edit_password');
+    }
+    public function change_password(ChangePasswordRequest $request){
+        $request->user()->password = Hash::make($request->password);
+        $request->user()->save();
+        alert('Exito','Contraseña actualizada','succes');
+        return redirect()->back();
+    }
+    //vistas
+
 }

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use phpDocumentor\Reflection\Types\Self_;
 use phpDocumentor\Reflection\Types\True_;
 use function PHPUnit\Framework\isNull;
 use Illuminate\Support\Facades\Hash;
@@ -112,6 +113,33 @@ class User extends Authenticatable implements MustVerifyEmail
         }
         return $msj;
     }
+    public function visible_users(){
+        $users = self::all();
+        if ($this->has_role(config('app.admin_role'))) $users = self::all();
+        if ($this->has_role(config('app.secretary_role'))) {
+            $users = self::whereHas('roles',function ($q){
+                $q->whereIn('slug',[
+                    config('app.doctor_role'),
+                    config('app.patient_role'),
+                ]);
+            })->get();
+        }
+        if ($this->has_role(config('app.doctor_role'))) {
+            $users = self::whereHas('roles',function ($q){
+                $q->whereIn('slug',[
+                    config('app.patient_role'),
+                ]);
+            })->get();
+        }
+        return $users;
+    }
+    public function has_any_role(array $roles){
+        foreach ($roles as $role){
+            if ($this->has_role($role)) return true;
+        }
+        return false;
+    }
+    //otras opciones
     public function verify_permission_integrity(array $roles){
         $permissions = $this->permissions;
         foreach ($permissions as $permission){
@@ -128,6 +156,26 @@ class User extends Authenticatable implements MustVerifyEmail
                 $permissions = $role_obj->permissions;
                 $this->permissions()->syncWithoutDetaching($permissions);
             }
+        }
+    }
+
+    //vistas
+    public function edit_view(){
+        $auth = auth()->user();
+        if ($auth->has_role(config('app.admin.role'))){
+            return 'theme.backoffice.pages.user.edit';
+        }else{
+            return 'theme.frontoffice.pages.user.edit';
+        }
+    }
+    public function user_show($view = null){
+        $auth = auth()->user();
+        if (!is_null($view) && $view == 'frontoffice'){
+            return 'frontoffice.user.profile';
+        }elseif ($auth->has_role(config('app.admin_role'))){
+            return 'backoffice.user.show';
+        }else{
+            return 'frontoffice.user.profile';
         }
     }
 }

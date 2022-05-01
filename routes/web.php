@@ -13,9 +13,9 @@ use App\Http\Controllers\RoleController;
 |
 */
 Route::get('test',function (){
-    $user = auth()->user();
+    return 'hola';
+})->middleware('role:administrador-paciente-secretaria');
 
-});
 Route::get('/',function (){
     return view('welcome');
 });
@@ -44,5 +44,15 @@ Route::group(['middleware' => ['cors']], function () {
 
 Route::group(['as'=>'frontoffice.'], function (){
    Route::get('profile','App\Http\Controllers\UserController@profile')->name('user.profile');
-   Route::get('pacient/cite', 'App\Http\Controllers\PatientController@cite')->name('patient.cite');
+    Route::get('profile/{user}/edit','App\Http\Controllers\UserController@edit')->name('user.edit');
+    Route::put('profile/{user}/update','App\Http\Controllers\UserController@update')->name('user.update');
+    Route::get('profile/edit_password','App\Http\Controllers\UserController@edit_password')->name('user.edit_password');
+    Route::put('profile/change_password','App\Http\Controllers\UserController@change_password')->name('user.change_password');
+
+   Route::get('pacient/schedule', 'App\Http\Controllers\PatientController@schedule')->name('patient.schedule');
+   Route::get('pacient/appointments','App\Http\Controllers\PatientController@appointments')->name('patient.appointments');
+   Route::get('pacient/prescriptions','App\Http\Controllers\PatientController@prescriptions')->name('patient.prescriptions');
+   Route::get('pacient/invoice','App\Http\Controllers\PatientController@invoices')->name('patient.invoices');
+
+
 });

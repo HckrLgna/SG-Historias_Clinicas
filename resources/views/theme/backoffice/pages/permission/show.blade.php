@@ -6,6 +6,9 @@
     <li><a href="{{route('backoffice.permission.index')}}">Permisos del sistema</a></li>
     <li>{{$permission->name}}</li>
 @endsection
+@section('dropdown_settings')
+    <li><a href="{{route('backoffice.permission.create')}}">Crear permiso</a></li>
+@endsection
 @section('content')
     <div class="section">
         <strong>Rol:</strong> <p>{{$permission->name}}</p>

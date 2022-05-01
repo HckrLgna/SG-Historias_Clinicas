@@ -6,6 +6,9 @@
     <li><a href="{{route('backoffice.role.index')}}">Roles del sistema</a></li>
     <li>{{$role->name}}</li>
 @endsection
+@section('dropdown_settings')
+    <li><a href="{{route('backoffice.role.create')}}">Crear rol</a></li>
+@endsection
 @section('content')
     <div class="section">
         <strong>Rol:</strong> <p>{{$role->name}}</p>

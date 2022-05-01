@@ -70,12 +70,18 @@
                             <i class="material-icons">lock_outline</i> Lock</a>
                     </li>
                     <li>
-                        <a href="#" class="grey-text text-darken-1">
-                            <i class="material-icons">keyboard_tab</i> Logout</a>
+                        <a class="grey-text text-darken-1" href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                            <i class="material-icons">keyboard_tab</i> {{ __('Logout') }}
+                        </a>
                     </li>
                 </ul>
             </div>
         </nav>
     </div>
     <!-- end header nav-->
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+    </form>
 </header>
