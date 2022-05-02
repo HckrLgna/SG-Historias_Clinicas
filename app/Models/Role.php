@@ -10,7 +10,7 @@ use RealRashid\SweetAlert;
 class Role extends Model
 {
     protected $fillable = [
-        'name','description','slug'
+        'name','slug','description'
     ];
     //relaciones
 

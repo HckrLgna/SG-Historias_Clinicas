@@ -12,6 +12,7 @@ use phpDocumentor\Reflection\Types\Self_;
 use phpDocumentor\Reflection\Types\True_;
 use function PHPUnit\Framework\isNull;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Role;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -85,23 +86,23 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public function has_role($id)
     {
+        $flag =false;
         foreach ($this->roles as $role){
-            if ($role->id == $id || $role->slug == $id){
-                return true;
-            }else{
-                return false;
+            if ($role->id == $id || $role->slug == $id ){
+                $flag = true;
             }
         }
+        return $flag;
     }
     public function has_permission($id)
     {
+        $flag=false;
         foreach ($this->permissions as $permission){
             if ($permission->id == $id || $permission->slug == $id){
-                return true;
-            }else{
-                return false;
+                $flag = true;
             }
         }
+        return $flag;
     }
     public function age(){
         if (!is_null($this->dob)){
@@ -117,7 +118,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $users = self::all();
         if ($this->has_role(config('app.admin_role'))) $users = self::all();
         if ($this->has_role(config('app.secretary_role'))) {
-            $users = self::whereHas('roles',function ($q){
+            $users = Self::whereHas('roles',function ($q){
                 $q->whereIn('slug',[
                     config('app.doctor_role'),
                     config('app.patient_role'),
@@ -125,7 +126,7 @@ class User extends Authenticatable implements MustVerifyEmail
             })->get();
         }
         if ($this->has_role(config('app.doctor_role'))) {
-            $users = self::whereHas('roles',function ($q){
+            $users = Self::whereHas('roles',function ($q){
                 $q->whereIn('slug',[
                     config('app.patient_role'),
                 ]);
@@ -133,9 +134,20 @@ class User extends Authenticatable implements MustVerifyEmail
         }
         return $users;
     }
-    public function has_any_role(array $roles){
+    public function visible_roles(){
+        if ($this->has_role(config('app.admin_role'))) $roles=Role::all();
+        if ($this->has_role(config('app.secretary_role'))){
+            $roles = Role::where('slug',config('app.patient_role'))->
+                            get();
+        }
+        return $roles;
+    }
+    public function has_any_role(array $roles): bool
+    {
         foreach ($roles as $role){
-            if ($this->has_role($role)) return true;
+            if ($this->has_role($role)) {
+              return true;
+            }
         }
         return false;
     }
@@ -160,9 +172,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     //vistas
-    public function edit_view(){
+    public function edit_view($view = null){
         $auth = auth()->user();
-        if ($auth->has_role(config('app.admin.role'))){
+        if (!is_null($view) && $view == 'frontoffice'){
+            return 'theme.frontoffice.pages.user.edit';
+        }elseif ($auth->has_any_role([
+            config('app.admin_role'),
+            config('app.secretary_role')
+        ])){
             return 'theme.backoffice.pages.user.edit';
         }else{
             return 'theme.frontoffice.pages.user.edit';
@@ -172,7 +189,10 @@ class User extends Authenticatable implements MustVerifyEmail
         $auth = auth()->user();
         if (!is_null($view) && $view == 'frontoffice'){
             return 'frontoffice.user.profile';
-        }elseif ($auth->has_role(config('app.admin_role'))){
+        }elseif ($auth->has_any_role([
+            config('app.admin_role'),
+            config('app.secretary_role')
+        ])){
             return 'backoffice.user.show';
         }else{
             return 'frontoffice.user.profile';

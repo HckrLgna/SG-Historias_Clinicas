@@ -14,6 +14,7 @@ class StoreRequest extends FormRequest
     public function authorize()
     {
         return $this->user()->can('create', Permission::class);
+
     }
 
     /**

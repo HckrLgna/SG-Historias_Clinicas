@@ -17,7 +17,7 @@
     "use strict";
 
     var window_width = $(window).width();
-    
+
 
     // Search class for focus
     $('.header-search-input').focus(
@@ -104,12 +104,13 @@
       edge: 'right',
     });
 
+    /*
     // Pikadate datepicker
     $('.datepicker').pickadate({
       selectMonths: true, // Creates a dropdown to control month
       selectYears: 15 // Creates a dropdown of 15 years to control year
     });
-
+    */
     // Perfect Scrollbar
     $('select').not('.disabled').material_select();
     var leftnav = $(".page-topbar").height();

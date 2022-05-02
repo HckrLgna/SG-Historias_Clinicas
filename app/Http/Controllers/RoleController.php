@@ -16,14 +16,17 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function __construct()
     {
         $this->middleware('role:' . config('app.admin_role'));
     }
+
     public function index()
     {
-    //falta añadir autorizacion
+
         $this->authorize('index',Role::class);
+
         return view('theme.backoffice.pages.role.index',[
             'roles'=>Role::all(),
         ]);
@@ -37,6 +40,7 @@ class RoleController extends Controller
     public function create()
     {
         $this->authorize('create',Role::class);
+
         return view('theme.backoffice.pages.role.create');
     }
 
@@ -104,8 +108,6 @@ class RoleController extends Controller
     {
         $this->authorize('delete',$role);
         $role->delete();
-
-
         return redirect()->route('backoffice.role.index');
     }
 }

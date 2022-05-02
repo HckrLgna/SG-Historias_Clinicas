@@ -2,10 +2,10 @@
 
 return [
 
-    'admin_role' => env('ADMIN_ROLE','admin'),
+    'admin_role' => env('ADMIN_ROLE','administrador'),
     'patient_role' => env('PATIENT_ROLE','paciente'),
     'doctor_role' => env('DOCTOR_ROLE','medico'),
-    'secretary_role' => env('SECRETARY_ROLE','secretaria'),
+    'secretary_role' => env('SECRETARY_ROLE','secretario'),
     /*
     |--------------------------------------------------------------------------
     | Application Name

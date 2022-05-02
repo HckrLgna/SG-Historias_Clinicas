@@ -16,13 +16,17 @@ class Role
      */
     public function handle(Request $request, Closure $next, $role = 'administrador')
     {
+
         //evaluar si el usuario esta identificado
         if (!auth()->check()) abort(403);
+
         //evaluar si el usuario tiene un determinado rol
+
         $roles = explode('-',$role);
         if ($request->user()->has_any_role($roles)){
             return $next($request);
         }else{
+
             abort(403);
         }
     }

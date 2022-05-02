@@ -16,6 +16,11 @@ class RolePolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
+    public function index(User $user)
+    {
+        return $user->has_permission('index-role');
+    }
+
     public function viewAny(User $user)
     {
         //
@@ -31,6 +36,7 @@ class RolePolicy
     public function view(User $user, Role $role)
     {
         return $user->has_permission('view-role');
+
     }
 
     /**
@@ -42,6 +48,7 @@ class RolePolicy
     public function create(User $user)
     {
         return $user->has_permission('create-role');
+
     }
 
     /**
@@ -54,6 +61,8 @@ class RolePolicy
     public function update(User $user, Role $role)
     {
         return $user->has_permission('update-role');
+        return true;
+
     }
 
     /**
@@ -66,6 +75,8 @@ class RolePolicy
     public function delete(User $user, Role $role)
     {
         return $user->has_permission('delete-role');
+        return true;
+
     }
 
     /**
@@ -91,8 +102,5 @@ class RolePolicy
     {
         //
     }
-    public function index(User $user)
-    {
-        return $user->has_permission('index-role');
-    }
+
 }

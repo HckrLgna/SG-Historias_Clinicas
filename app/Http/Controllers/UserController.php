@@ -13,8 +13,14 @@ use function Sodium\add;
 
 class UserController extends Controller
 {
+    /*
     public function __construct(){
         $this->middleware('auth');
+    }
+    */
+    public function __construct()
+    {
+        $this->middleware('role:' . config('app.admin_role') . '-' . config('app.secretary_role'));
     }
     /**
      * Display a listing of the resource.
@@ -38,7 +44,7 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
         return view('theme.backoffice.pages.user.create',[
-            'roles'=>Role::all(),
+            'roles'=> auth()->user()->visible_roles(),
         ]);
     }
 
@@ -80,7 +86,6 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $this->authorize('update',$user);
-
         return view($user->edit_view(),[
             'user'=>$user
         ]);
@@ -142,7 +147,7 @@ class UserController extends Controller
         $user = auth()->user();
        return view('theme.frontoffice.pages.user.profile',[
            'user' => $user,
-       ]);
+       ] );
     }
     public function edit_password(){
         $this->authorize('update_password',auth()->user());

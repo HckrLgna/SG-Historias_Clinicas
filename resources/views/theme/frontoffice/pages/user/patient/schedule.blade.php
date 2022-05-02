@@ -24,6 +24,15 @@
                                 <div class="input-field cols12">
                                     <i class="material-icons prefix">people</i>
                                     <select name="doctor" id="doctor">
+                                        <option value="1"> Pediatra</option>
+                                    </select>
+                                    <label for="doctor">Selecciona la especialidad </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field cols12">
+                                    <i class="material-icons prefix">people</i>
+                                    <select name="doctor" id="doctor">
                                         <option value="1"> Ramirez</option>
                                     </select>
                                     <label for="doctor">Selecciona al doctor</label>
@@ -32,13 +41,13 @@
                             <div class="row">
                                 <div class="input-field col s12 m6">
                                     <i class="material-icons prefix">date_range</i>
-                                    <input id="datepicker" type="text" name="date" class="datepicker">
-                                    <label for="datepicker">Selecciona un fecha</label>
+                                    <input id="datepicker" type="text" name="date" class="datepicker" placeholder="Selecciona una fecha">
+
                                 </div>
                                 <div class="input-field col s12 m6">
                                     <i class="material-icons prefix">access_time</i>
-                                    <input id="timepicker" type="text" name="time" class="timepicker">
-                                    <label for="timepicker">Selecciona una hora </label>
+                                    <input id="timepicker" type="text" name="time" class="timepicker" placeholder="Selecciona una hora">
+
                                 </div>
                             </div>
                             <div class="row">
