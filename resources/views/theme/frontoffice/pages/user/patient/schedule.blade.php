@@ -1,9 +1,9 @@
 @extends('theme.frontoffice.layouts.main')
 @section('title','Agendar una cita')
 @section('head')
-    <link rel="stylesheet" href="{{ asset('assets/frontoffice/plugins/pickadate/themes/default.css')}}">
-    <link rel="stylesheet" href="{{ asset('assets/frontoffice/plugins/pickadate/themes/default.date.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/frontoffice/plugins/pickadate/themes/default.time.css')}}">
+    <link rel="stylesheet" href="{{ secure_secure_asset('assets/frontoffice/plugins/pickadate/themes/default.css')}}">
+    <link rel="stylesheet" href="{{ secure_secure_asset('assets/frontoffice/plugins/pickadate/themes/default.date.css')}}">
+    <link rel="stylesheet" href="{{secure_secure_asset('assets/frontoffice/plugins/pickadate/themes/default.time.css')}}">
 @endsection
 
 @section('content')
@@ -71,10 +71,10 @@
     </div>
 @endsection
 @section('foot')
-    <script src="{{ asset('assets/frontoffice/plugins/pickadate/picker.js') }}"></script>
-    <script src="{{ asset('assets/frontoffice/plugins/pickadate/picker.date.js') }}"></script>
-    <script src="{{ asset('assets/frontoffice/plugins/pickadate/picker.time.js') }}"></script>
-    <script src="{{ asset('assets/frontoffice/plugins/pickadate/legacy.js') }}"></script>
+    <script src="{{ secure_secure_asset('assets/frontoffice/plugins/pickadate/picker.js') }}"></script>
+    <script src="{{ secure_secure_asset('assets/frontoffice/plugins/pickadate/picker.date.js') }}"></script>
+    <script src="{{ secure_secure_asset('assets/frontoffice/plugins/pickadate/picker.time.js') }}"></script>
+    <script src="{{ secure_secure_asset('assets/frontoffice/plugins/pickadate/legacy.js') }}"></script>
 
     <script>
         $('select').formSelect();
