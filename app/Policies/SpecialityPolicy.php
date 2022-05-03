@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Role;
+use App\Models\Speciality;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class RolePolicy
+class SpecialityPolicy
 {
     use HandlesAuthorization;
 
@@ -16,11 +16,6 @@ class RolePolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function index(User $user)
-    {
-        return $user->has_permission('index-role');
-    }
-
     public function viewAny(User $user)
     {
         //
@@ -30,13 +25,12 @@ class RolePolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\Speciality  $speciality
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Role $role)
+    public function view(User $user, Speciality $speciality)
     {
-        return $user->has_permission('view-role');
-
+        //
     }
 
     /**
@@ -47,44 +41,41 @@ class RolePolicy
      */
     public function create(User $user)
     {
-        return $user->has_permission('create-role');
-
+        return $user->has_role(config('app.admin_role'));
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\Speciality  $speciality
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Role $role)
+    public function update(User $user, Speciality $speciality)
     {
-        return $user->has_permission('update-role');
-
+        return $user->has_role(config('app.admin_role'));
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\Speciality  $speciality
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Role $role)
+    public function delete(User $user, Speciality $speciality)
     {
-        return $user->has_permission('delete-role');
-
+        //
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\Speciality  $speciality
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Role $role)
+    public function restore(User $user, Speciality $speciality)
     {
         //
     }
@@ -93,12 +84,11 @@ class RolePolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\Speciality  $speciality
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Role $role)
+    public function forceDelete(User $user, Speciality $speciality)
     {
         //
     }
-
 }

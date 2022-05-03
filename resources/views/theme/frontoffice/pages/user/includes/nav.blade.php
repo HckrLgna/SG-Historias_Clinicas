@@ -2,7 +2,7 @@
 <div class="col s12 m4">
     <div class="collection">
         <a href="{{route('frontoffice.user.profile')}}" class="collection-item {!!active_class(route('frontoffice.user.profile'))!!}">Perfil</a>
-        @if(auth()->user()->has_role(config('app.patient_role')))
+        @if(auth()->user()->has_role(config('app.patient_role')) )
             <a
                 href="{{route('frontoffice.patient.schedule')}}"
                 class="collection-item {!!active_class(route('frontoffice.patient.schedule'))!!}">

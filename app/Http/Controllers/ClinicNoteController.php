@@ -2,25 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClinicNote;
 use Illuminate\Http\Request;
+use App\Http\Requests\ClinicNote\StoreRequest;
+use App\Models\User;
+use App\Http\Requests\ClinicNote\UpdateRequest;
 
-class AdminController extends Controller
+class ClinicNoteController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-
-        $this->middleware('role:' . config('app.admin_role') . '-' .
-                                            config('app.secretary_role') . '-' .
-                                            config('app.doctor_role')
-        );
-
-    }
-
     public function index()
     {
         //
@@ -42,30 +36,30 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request,User $user, ClinicNote $clinic_note)
     {
-        //
+        $clinic_note->store($request, $user);
+        return redirect()->route('backoffice.clinic_data.index', $user);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\ClinicNote  $clinicNote
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(ClinicNote $clinicNote)
     {
-
-        return view('theme.backoffice.pages.admin.show');
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\ClinicNote  $clinicNote
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(ClinicNote $clinicNote)
     {
         //
     }
@@ -74,21 +68,22 @@ class AdminController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\ClinicNote  $clinicNote
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, User $user, ClinicNote $clinic_note)
     {
-        //
+        $clinic_note->my_update($request);
+        return redirect()->route('backoffice.clinic_data.index', $user);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\ClinicNote  $clinicNote
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ClinicNote $clinicNote)
     {
         //
     }

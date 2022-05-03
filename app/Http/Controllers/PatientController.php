@@ -2,13 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
+use App\Models\Invoice;
+use App\Models\Speciality;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
 {
     public function schedule(){
-        return view('theme.frontoffice.pages.user.patient.schedule');
+        return view('theme.frontoffice.pages.user.patient.schedule',[
+            'specialities' => Speciality::all(),
+        ]);
+    }
+    public function store_schedule(Request $request, Appointment $appointment, Invoice $invoice){
+
+
+        $invoice = $invoice->store($request);
+
+        $appointment = $appointment->store($request , $invoice);
+        return redirect()->route('frontoffice.patient.appointments');
     }
     public function back_schedule(User $user){
         return view('theme.backoffice.pages.user.patient.schedule',[

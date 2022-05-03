@@ -1,17 +1,17 @@
 @extends('theme.backoffice.layouts.admin')
-@section('title','Usuarios del sistema')
+@section('title','Especialidades medicas')
 @section('head')
 @endsection
 @section('breadcrumbs')
-    <li><a href="{{route('backoffice.user.index')}}">Usuarios del sistema</a></li>
+    <li><a href="{{route('backoffice.speciality.index')}}" class="active"> Especialidades medicas</a></li>
 @endsection
 @section('dropdown_settings')
-    <li><a href="{{route('backoffice.user.create')}}">Crear usuarios</a></li>
+    <li><a href="{{route('backoffice.speciality.create')}}">Crear especialidades</a></li>
 @endsection
 
 @section('content')
     <div class="section">
-        <b>Usuarios del sistema</b>
+        <p class="caption"><strong>Especialidades medicas</strong></p>
         <div class="divider"></div>
         <div class="section">
             <div class="row">
@@ -22,21 +22,17 @@
                                 <thead>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>Edad</th>
-                                    <th>Correo</th>
-                                    <th>Roles del sistema</th>
-                                    <th colspan="2">Acciones</th>
+                                    <th>Numero de medicos</th>
+                                    <th>Acciones</th>
                                 </tr>
                                 </thead>
 
                                 <tbody>
-                                @foreach($users as $user)
+                                @foreach($specialities as $speciality)
                                     <tr>
-                                        <td><a href="{{route('backoffice.user.show',$user)}}">{{$user->name}}</a></td>
-                                        <td>{{$user->age()}}</td>
-                                        <td>{{$user->email}}</td>
-                                        <td>{{$user->list_roles()}}</td>
-                                        <td><a href="{{route('backoffice.user.edit',$user)}}">Editar</a></td>
+                                        <td><a href="{{route('backoffice.speciality.show',$speciality)}}">{{$speciality->name}}</a></td>
+                                        <td>{{$speciality->users->count()}}</td>
+                                        <td><a href="{{route('backoffice.speciality.edit',$speciality)}}">Editar</a></td>
                                     </tr>
                                 @endforeach
                                 </tbody>

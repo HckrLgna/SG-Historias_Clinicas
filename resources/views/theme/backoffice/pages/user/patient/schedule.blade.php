@@ -29,16 +29,20 @@
                         </span>
                             <form action="" method="POST">
                                 {{csrf_field()}}
-                                <div class="row">
+                                @if(Auth::user()->has_role(config('app.doctor_role')))
+                                    <input type="hidden" name="speciality" value="">
+                                    <input type="hidden" name="doctor" value="{{ Auth::id() }}">
+                                @else
+                                    <div class="row">
                                     <div class="input-field cols12">
                                         <i class="material-icons prefix">people</i>
-                                        <select name="doctor" id="doctor">
+                                        <select name="speciality">
                                             <option value="1"> Pediatra</option>
                                         </select>
                                         <label for="doctor">Selecciona la especialidad </label>
                                     </div>
                                 </div>
-                                <div class="row">
+                                    <div class="row">
                                     <div class="input-field cols12">
                                         <i class="material-icons prefix">people</i>
                                         <select name="doctor" id="doctor">
@@ -47,6 +51,7 @@
                                         <label for="doctor">Selecciona al doctor</label>
                                     </div>
                                 </div>
+                                @endif
                                 <div class="row">
                                     <div class="input-field col s12 m6">
                                         <i class="material-icons prefix">date_range</i>

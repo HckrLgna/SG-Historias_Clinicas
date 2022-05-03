@@ -18,13 +18,16 @@
                         <span class="card-title">
                             @yield('title' )
                         </span>
-                        <form action="" method="POST">
+                        <form action="{{route('frontoffice.patient.store_schedule')}}" method="POST">
                             {{csrf_field()}}
                             <div class="row">
                                 <div class="input-field cols12">
                                     <i class="material-icons prefix">people</i>
-                                    <select name="doctor" id="doctor">
-                                        <option value="1"> Pediatra</option>
+                                    <select name="" id="speciality">
+                                        <option disabled="" value="" selected="">Selecciona una especialidad</option>
+                                        @foreach($specialities as $speciality)
+                                            <option value="{{$speciality->id}}">{{$speciality->name}}</option>
+                                        @endforeach
                                     </select>
                                     <label for="doctor">Selecciona la especialidad </label>
                                 </div>
@@ -33,7 +36,14 @@
                                 <div class="input-field cols12">
                                     <i class="material-icons prefix">people</i>
                                     <select name="doctor" id="doctor">
-                                        <option value="1"> Ramirez</option>
+
+                                        @foreach($specialities as $speciality)
+                                            @foreach($speciality->users as $user)
+                                                @if($user->has_role(config('app.doctor_role')) )
+                                                    <option value="{{$user->id}}">{{$user->name}}</option>
+                                                @endif
+                                            @endforeach
+                                        @endforeach
                                     </select>
                                     <label for="doctor">Selecciona al doctor</label>
                                 </div>
@@ -65,17 +75,36 @@
     <script src="{{ asset('assets/frontoffice/plugins/pickadate/picker.date.js') }}"></script>
     <script src="{{ asset('assets/frontoffice/plugins/pickadate/picker.time.js') }}"></script>
     <script src="{{ asset('assets/frontoffice/plugins/pickadate/legacy.js') }}"></script>
+
     <script>
         $('select').formSelect();
         var input_date = $('.datepicker').pickadate({
-            min: true
+            min: true,
+            formatSubmit: 'yyyy-m-d'
         });
         var date_picker = input_date.pickadate('picker');
 
 
         var input_time = $('.timepicker').pickatime({
-            min: 4
+            min: [7,30],
+            max: [21,0],
+            format: 'HH:i',
         });
         var time_picker = input_time.pickatime('picker');
+
+        var speciality = $('#speciality');
+        var doctor = $('#doctor');
+        speciality.change(function (){
+            $.ajax({
+               url: "{{route('ajax.user_speciality')}}",
+                method: 'GET',
+                data: {
+                   speciality: speciality.val(),
+                },
+                success: function (data){
+                   console.log(data);
+                }
+            });
+        });
     </script>
 @endsection

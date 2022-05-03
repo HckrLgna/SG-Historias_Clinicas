@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Role;
 use http\Env\Request;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +13,7 @@ use phpDocumentor\Reflection\Types\Self_;
 use phpDocumentor\Reflection\Types\True_;
 use function PHPUnit\Framework\isNull;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Role;
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -54,6 +55,23 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public function permissions(){
         return $this->belongsToMany('App\Models\Permission')->withTimestamps();
+    }
+    public function specialities(){
+        return $this->belongsToMany('App\Models\Speciality')->withTimestamps();
+    }
+    public function invoices(){
+        return $this->hasMany('App\Models\Invoice');
+    }
+    public function appointments(){
+        return $this->hasMany('App\Models\Appointment');
+    }
+    public function clinic_datas()
+    {
+        return $this->hasMany('App\Models\ClinicData');
+    }
+    public function clinic_notes()
+    {
+        return $this->hasMany('App\Models\ClinicNote');
     }
     //almacenamiento
     public function store($request){
@@ -104,6 +122,13 @@ class User extends Authenticatable implements MustVerifyEmail
         }
         return $flag;
     }
+    public function has_speciality($id){
+        $flag = false;
+        foreach ($this->specialities as $speciality){
+            if ($speciality->id == $id) $flag = true;
+        }
+        return $flag;
+    }
     public function age(){
         if (!is_null($this->dob)){
             $age = $this->dob->age;
@@ -116,16 +141,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public function visible_users(){
         $users = self::all();
-        if ($this->has_role(config('app.admin_role'))) $users = self::all();
-        if ($this->has_role(config('app.secretary_role'))) {
+        if ($this->has_role(config('app.admin_role'))) {
+            $users = self::all();
+        }elseif ($this->has_role(config('app.secretary_role'))) {
             $users = Self::whereHas('roles',function ($q){
                 $q->whereIn('slug',[
                     config('app.doctor_role'),
                     config('app.patient_role'),
                 ]);
             })->get();
-        }
-        if ($this->has_role(config('app.doctor_role'))) {
+        }elseif ($this->has_role(config('app.doctor_role'))) {
             $users = Self::whereHas('roles',function ($q){
                 $q->whereIn('slug',[
                     config('app.patient_role'),
@@ -135,8 +160,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $users;
     }
     public function visible_roles(){
+        $roles=Role::all();
         if ($this->has_role(config('app.admin_role'))) $roles=Role::all();
-        if ($this->has_role(config('app.secretary_role'))){
+        if ($this->has_any_role([config('app.secretary_role'), config('app.doctor_role')]) ){
             $roles = Role::where('slug',config('app.patient_role'))->
                             get();
         }
@@ -170,6 +196,16 @@ class User extends Authenticatable implements MustVerifyEmail
             }
         }
     }
+    public function list_roles(){
+        $roles = $this->roles->pluck('name')->toArray();
+        $string =implode(',',$roles);
+        return $string;
+    }
+    public function list_specialities(){
+        $specialities= $this->specialities->pluck('name')->toArray();
+        $string = implode(',',$specialities);
+        return $string;
+    }
 
     //vistas
     public function edit_view($view = null){
@@ -197,5 +233,21 @@ class User extends Authenticatable implements MustVerifyEmail
         }else{
             return 'frontoffice.user.profile';
         }
+    }
+
+    public function clinic_data_array()
+    {
+        $datas = $this->clinic_datas->pluck('value','key')->toArray();
+        return $datas;
+    }
+    public function clinic_data($key, $array = null, $default = null)
+    {
+        $array = (!is_null($array)) ? $array : $this->clinic_data_array();
+        if(array_key_exists($key, $array)){
+            $value = $array[$key];
+        }else{
+            $value = $default;
+        }
+        return $value;
     }
 }

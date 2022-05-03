@@ -35,7 +35,6 @@ class UserPolicy
     public function view(User $user, user $model)
     {
         return $user->has_permission('view-user');
-
     }
 
     /**
@@ -125,5 +124,8 @@ class UserPolicy
     public function update_password(User $user, User $model){
 
         return $user->id == $model->id;
+    }
+    public function view_profile(User $user){
+        return $user->has_permission('view-profile');
     }
 }
